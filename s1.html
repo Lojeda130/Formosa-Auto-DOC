@@ -1,0 +1,659 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>1 Infraestructura &amp; Herramientas — Framework de Automatización · Banco de Formosa</title><style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0a1f3d 0%, #0a18c8 50%, #04096e 100%);
+    padding: 28px;
+    min-height: 100vh;
+  }
+
+  .page-title {
+    text-align: center; color: white;
+    font-size: 1.65rem; font-weight: 800;
+    margin-bottom: 4px; text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    letter-spacing: -0.5px;
+  }
+  .page-sub {
+    text-align: center; color: rgba(255,255,255,0.65);
+    font-size: 0.82rem; margin-bottom: 32px; letter-spacing: 0.3px;
+  }
+
+  .container {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ── TOC ───────────────────────────────── */
+  .toc-card {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px; padding: 20px 28px; margin-bottom: 30px;
+    display: flex; flex-wrap: wrap; gap: 10px 24px;
+  }
+  .toc-title { width: 100%; color: rgba(255,255,255,0.5); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
+  .toc-item { color: rgba(255,255,255,0.8); font-size: 0.77rem; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+  .toc-item:hover { color: #00b8e0; }
+  .toc-num { background: rgba(167,139,250,0.25); color: #00b8e0; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.62rem; font-weight: 800; flex-shrink: 0; }
+
+  /* ── SECTION BREAK ─────────────────────── */
+  .section-break {
+    font-weight: 800; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 2px;
+    color: #00b8e0; padding-bottom: 7px; border-bottom: 2px solid rgba(0,174,239,0.3);
+    margin: 36px 0 20px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-num {
+    background: linear-gradient(135deg,#0a18c8,#00b8e0);
+    color: white; font-size: 0.7rem; font-weight: 800; padding: 2px 9px;
+    border-radius: 20px;
+  }
+
+  /* ── SWIMLANE ───────────────────────────── */
+  .swimlane { margin-bottom: 22px; border-radius: 16px; overflow: hidden; box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+  .swimlane-header {
+    padding: 18px 28px; font-weight: 700; font-size: 1.35em;
+    color: white; display: flex; align-items: center; gap: 10px;
+  }
+  .swimlane-content { padding: 22px 26px; background: white; }
+
+  .lane-purple .swimlane-header { background: linear-gradient(135deg,#0a18c8,#00b8e0); }
+  .lane-blue   .swimlane-header { background: linear-gradient(135deg,#00b8e8,#00d4ff); }
+  .lane-teal   .swimlane-header { background: linear-gradient(135deg,#5a9b1e,#A8E063); }
+  .lane-orange .swimlane-header { background: linear-gradient(135deg,#d97706,#fbbf24); }
+  .lane-red    .swimlane-header { background: linear-gradient(135deg,#b91c1c,#f87171); }
+  .lane-dark   .swimlane-header { background: linear-gradient(135deg,#1e293b,#475569); }
+  .lane-green  .swimlane-header { background: linear-gradient(135deg,#5a9b1e,#A8E063); }
+  .lane-indigo .swimlane-header { background: linear-gradient(135deg,#04096e,#2040e8); }
+
+  /* ── GRIDS ──────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+  .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+
+  /* ── CARDS ──────────────────────────────── */
+  .card {
+    background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 16px 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .card-title {
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px;
+    margin-bottom: 11px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0;
+  }
+  .ct-purple { color: #1a2edb; }
+  .ct-blue   { color: #00b8e8; }
+  .ct-teal   { color: #5a9b1e; }
+  .ct-orange { color: #b45309; }
+  .ct-red    { color: #b91c1c; }
+  .ct-green  { color: #5a9b1e; }
+
+  /* ── CONCEPT BOXES ──────────────────────── */
+  .concept-box {
+    background: #e0f0ff; border-left: 4px solid #0a18c8;
+    border-radius: 0 10px 10px 0; padding: 13px 17px; margin-bottom: 16px;
+    font-size: 0.8rem; color: #04096e; line-height: 1.7;
+  }
+  .concept-box strong { display: block; margin-bottom: 4px; font-size: 0.83rem; color: #1a2edb; }
+
+  .concept-box-blue {
+    background: #e0f8ff; border-left: 4px solid #00d4ff;
+    border-radius: 0 10px 10px 0; padding: 13px 17px; margin-bottom: 16px;
+    font-size: 0.8rem; color: #006b99; line-height: 1.7;
+  }
+  .concept-box-blue strong { display: block; margin-bottom: 4px; font-size: 0.83rem; color: #00b8e8; }
+
+  .concept-box-teal {
+    background: #f0f9e4; border-left: 4px solid #5a9b1e;
+    border-radius: 0 10px 10px 0; padding: 13px 17px; margin-bottom: 16px;
+    font-size: 0.8rem; color: #2d5a10; line-height: 1.7;
+  }
+  .concept-box-teal strong { display: block; margin-bottom: 4px; font-size: 0.83rem; color: #5a9b1e; }
+
+  /* ── ALERTS ─────────────────────────────── */
+  .warn-box {
+    background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px;
+    padding: 11px 15px; margin-top: 12px; font-size: 0.76rem; color: #78350f; line-height: 1.65;
+  }
+  .warn-box strong { font-weight: 700; display: block; margin-bottom: 4px; }
+  .info-box {
+    background: #e0f8ff; border: 1px solid #80eaff; border-radius: 10px;
+    padding: 11px 15px; margin-top: 12px; font-size: 0.76rem; color: #006b99; line-height: 1.65;
+  }
+  .info-box strong { font-weight: 700; display: block; margin-bottom: 4px; }
+  .success-note {
+    background: #f0f9e4; border: 1px solid #b3df6e; border-radius: 10px;
+    padding: 11px 15px; margin-top: 12px; font-size: 0.76rem; color: #2d5a10; line-height: 1.65;
+  }
+  .success-note strong { font-weight: 700; display: block; margin-bottom: 4px; }
+
+  /* ── FLOW STEPS ─────────────────────────── */
+  .flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+  .flow-step {
+    background: white; border: 2px solid #c4b5fd; border-radius: 9px;
+    padding: 7px 13px; font-size: 0.76rem; color: #0a18c8; font-weight: 600; text-align: center;
+  }
+  .flow-step.blue   { border-color: #80eaff; color: #00b8e8; }
+  .flow-step.teal   { border-color: #8DC63F; color: #5a9b1e; }
+  .flow-step.orange { border-color: #fcd34d; color: #b45309; background: #fffbeb; }
+  .flow-step.green  { border-color: #b3df6e; color: #5a9b1e; background: #f0f9e4; }
+  .flow-step.red    { border-color: #fca5a5; color: #b91c1c; background: #fef2f2; }
+  .flow-step.gray   { border-color: #cbd5e1; color: #475569; background: #f8fafc; }
+  .flow-step.dark   { border-color: #64748b; color: white; background: #06103a; }
+  .flow-arrow { color: #94a3b8; font-size: 1.1rem; flex-shrink: 0; }
+
+  /* ── TABLES ─────────────────────────────── */
+  table { width: 100%; border-collapse: collapse; font-size: 0.74rem; margin-top: 6px; }
+  th {
+    background: #f1f5f9; color: #64748b; font-size: 0.63rem; text-transform: uppercase;
+    letter-spacing: 1.2px; padding: 9px 12px; text-align: left; border-bottom: 2px solid #e2e8f0;
+    font-weight: 700;
+  }
+  td {
+    padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.73rem;
+    vertical-align: middle; color: #06103a; line-height: 1.55;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f0f8ff; }
+
+  /* ── TAGS ───────────────────────────────── */
+  .tag {
+    display: inline-block; padding: 2px 9px; border-radius: 20px;
+    font-size: 0.63rem; font-weight: 700; white-space: nowrap;
+  }
+  .tag-purple { background: #cce8ff; color: #0a18c8; }
+  .tag-blue   { background: #d0f7ff; color: #0097c4; }
+  .tag-teal   { background: #e6f5d0; color: #4a8219; }
+  .tag-green  { background: #e6f5d0; color: #5a9b1e; }
+  .tag-orange { background: #fef3c7; color: #b45309; }
+  .tag-red    { background: #fee2e2; color: #b91c1c; }
+  .tag-gray   { background: #f1f5f9; color: #475569; }
+  .tag-dark   { background: #06103a; color: #94a3b8; }
+
+  /* ── CODE ───────────────────────────────── */
+  code {
+    background: #d0eeff; color: #1e3a5f; padding: 2px 7px;
+    border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.8em; font-weight: 600;
+  }
+  pre {
+    background: #03072b; color: #e2e8f0; border-radius: 10px;
+    padding: 16px 18px; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.76rem; line-height: 1.7; overflow-x: auto; margin: 10px 0;
+  }
+  pre .c  { color: #64748b; }
+  pre .k  { color: #00b8e0; }
+  pre .s  { color: #8DC63F; }
+  pre .kw { color: #00d4ff; }
+
+  /* ── STEPS (numbered) ───────────────────── */
+  .steps { display: flex; flex-direction: column; gap: 10px; }
+  .step-row { display: flex; align-items: flex-start; gap: 14px; }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 800; color: white;
+    background: linear-gradient(135deg,#0a18c8,#00b8e0);
+    margin-top: 1px;
+  }
+  .step-num.blue   { background: linear-gradient(135deg,#00b8e8,#00d4ff); }
+  .step-num.teal   { background: linear-gradient(135deg,#5a9b1e,#8DC63F); }
+  .step-num.orange { background: linear-gradient(135deg,#d97706,#fbbf24); }
+  .step-body { flex: 1; }
+  .step-body strong { font-size: 0.82rem; color: #06103a; display: block; margin-bottom: 3px; }
+  .step-body p, .step-body li { font-size: 0.76rem; color: #475569; line-height: 1.65; }
+
+  /* ── BRANCH DIAGRAM ─────────────────────── */
+  .branch-tree { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; line-height: 2; }
+  .br-main   { color: #00b8e0; font-weight: 700; }
+  .br-dev    { color: #00d4ff; font-weight: 600; }
+  .br-feat   { color: #8DC63F; }
+  .br-indent { padding-left: 22px; }
+  .br-indent2 { padding-left: 44px; }
+
+  /* ── SPEC CARD (infra) ───────────────────── */
+  .spec-card {
+    background: #03072b; border: 1px solid #334155; border-radius: 12px;
+    padding: 18px; color: #e2e8f0;
+  }
+  .spec-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; margin-bottom: 12px; }
+  .spec-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #06103a; font-size: 0.75rem; }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-key { color: #64748b; }
+  .spec-val { color: #00b8e0; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; }
+
+  /* ── MISC ───────────────────────────────── */
+  p.desc { font-size: 0.78rem; color: #64748b; line-height: 1.7; margin-bottom: 10px; }
+  li { margin-left: 1.4rem; margin-bottom: 5px; font-size: 0.76rem; line-height: 1.6; color: #334155; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .dot-green  { background: #6AB023; }
+  .dot-yellow { background: #eab308; }
+  .dot-red    { background: #ef4444; }
+  .dot-blue   { background: #00d4ff; }
+  .dot-purple { background: #2040e8; }
+
+  .divider { border: none; border-top: 1px solid #e2e8f0; margin: 18px 0; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 20px;
+    padding: 3px 10px; font-size: 0.71rem; color: #475569; font-weight: 500; margin: 2px;
+  }
+  .pill-icon { font-size: 0.85em; }
+
+  .highlight-row { background: white !important; }
+  .highlight-row td { color: #1e293b !important; }
+
+  .checklist li { list-style: none; margin-left: 0; padding-left: 0; display: flex; gap: 8px; align-items: flex-start; }
+  .checklist li::before { content: "✓"; color: #6AB023; font-weight: 800; flex-shrink: 0; font-size: 0.85rem; }
+
+.page-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;gap:12px;}.nav-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:white;text-decoration:none;padding:8px 18px;border-radius:8px;font-size:0.78rem;font-weight:600;transition:background 0.2s;}.nav-btn:hover{background:rgba(255,255,255,0.22);}.nav-btn-next{background:#0a18c8;border-color:#0a18c8;}.nav-btn-next:hover{opacity:0.88;}.nav-home{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.72rem;font-weight:500;padding:6px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);}.nav-home:hover{color:white;background:rgba(255,255,255,0.08);}</style></head><body><div class="container"><div class="page-nav"><span></span><a class="nav-home" href="index.html">🏠 Índice</a><a class="nav-btn nav-btn-next" href="s2.html">Siguiente →</a></div>
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.12);">
+    <div>
+      <div class="page-title" style="text-align:left; font-size:1.1rem; margin-bottom:2px;">Framework de Automatización de Pruebas</div>
+      <div class="page-sub" style="text-align:left; margin-bottom:0;">CPA Ferrere — Banco de Formosa</div>
+    </div>
+    <img src="data:image/png;base64,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" alt="CPA Ferrere" style="height:44px; width:auto; filter:invert(1) brightness(2) drop-shadow(0 2px 6px rgba(0,0,0,0.3)); flex-shrink:0;">
+  </div>  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="section-break" id="s1">
+    <span class="section-num">1</span> Infraestructura &amp; Herramientas
+  </div>
+
+  <div class="swimlane lane-purple">
+    <div class="swimlane-header">🖥️ Visión General de la Infraestructura</div>
+    <div class="swimlane-content">
+      <div class="concept-box">
+        <strong>Arquitectura recomendada</strong>
+        La VM Windows actúa como servidor central para Android, Desktop y Web/API. Para iOS se requiere un agente macOS adicional (Mac Mini o similar) con Xcode instalado, ya que el simulador de iOS solo puede ejecutarse en macOS. Ambos agentes son gestionados por Jenkins como nodos del mismo pipeline.
+      </div>
+      <div class="grid-2" style="margin-bottom:16px;">
+
+        <!-- VM SERVIDOR -->
+        <div style="background:#03072b; border-radius:14px; overflow:hidden; box-shadow:0 4px 18px rgba(0,0,0,0.3);">
+          <div style="background:linear-gradient(135deg,#0a18c8,#04096e); padding:12px 18px; display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.3rem;">🖥️</span>
+            <div>
+              <div style="color:white; font-weight:700; font-size:0.88rem;">VM Servidor</div>
+              <div style="color:rgba(255,255,255,0.55); font-size:0.68rem; letter-spacing:0.5px;">Ejecución CI/CD · Tests headless</div>
+            </div>
+            <span style="margin-left:auto; background:rgba(0,174,239,0.2); color:#00d4ff; font-size:0.62rem; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:1px;">SERVIDOR</span>
+          </div>
+          <div style="padding:16px 18px;">
+            <table style="margin-top:0;">
+              <thead><tr>
+                <th style="background:#06103a; color:#64748b;">Componente</th>
+                <th style="background:#06103a; color:#64748b;">Versión</th>
+                <th style="background:#06103a; color:#64748b;">Rol</th>
+              </tr></thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0;">Jenkins</td><td style="color:#00d4ff; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">LTS</td><td style="color:#94a3b8; font-size:0.71rem;">Orquestación CI/CD</td>
+                </tr>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0;">JDK 21</td><td style="color:#00d4ff; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">21 LTS (21.0.x)</td><td style="color:#94a3b8; font-size:0.71rem;">Runtime de tests</td>
+                </tr>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0;">Maven</td><td style="color:#00d4ff; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">3.9.x</td><td style="color:#94a3b8; font-size:0.71rem;">Build &amp; dependencias</td>
+                </tr>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0;">Node.js</td><td style="color:#00d4ff; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">20.x LTS</td><td style="color:#94a3b8; font-size:0.71rem;">Requerido por Appium</td>
+                </tr>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0;">Appium Server</td><td style="color:#00d4ff; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">2.x</td><td style="color:#94a3b8; font-size:0.71rem;">Mobile + Desktop</td>
+                </tr>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0; font-size:0.72rem;">↳ Driver uiautomator2</td><td style="color:#8DC63F; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">via npm</td><td style="color:#94a3b8; font-size:0.71rem;">Android</td>
+                </tr>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0; font-size:0.72rem;">↳ Driver xcuitest</td><td style="color:#8DC63F; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">via npm</td><td style="color:#94a3b8; font-size:0.71rem;">iOS — <em>en agente macOS</em>
+                </tr>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0; font-size:0.72rem;">↳ Driver windows</td><td style="color:#8DC63F; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">via npm</td><td style="color:#94a3b8; font-size:0.71rem;">Desktop Windows</td>
+                </tr>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0;">WinAppDriver</td><td style="color:#00d4ff; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">1.2.1</td><td style="color:#94a3b8; font-size:0.71rem;">Automatización desktop</td>
+                </tr>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0;">Android Studio / AVD</td><td style="color:#00d4ff; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">Android 12+</td><td style="color:#94a3b8; font-size:0.71rem;">Emulador mobile</td>
+                </tr>
+                <tr style="border-bottom:1px solid #06103a;">
+                  <td style="color:#e2e8f0;">Agente macOS + Xcode</td><td style="color:#00d4ff; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">Xcode 15+</td><td style="color:#94a3b8; font-size:0.71rem;">iOS Simulator (nodo Jenkins)
+                </tr>
+                <tr>
+                  <td style="color:#e2e8f0;">Aplicativo Desktop</td><td style="color:#00d4ff; font-family:'JetBrains Mono',monospace; font-size:0.71rem;">—</td><td style="color:#94a3b8; font-size:0.71rem;">App desktop del proyecto</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="margin-top:12px; background:rgba(0,174,239,0.08); border:1px solid rgba(0,174,239,0.2); border-radius:8px; padding:9px 12px; font-size:0.71rem; color:#94a3b8; line-height:1.6;">
+              <span style="color:#00d4ff; font-weight:700;">Variables de entorno:</span><br>
+              <code style="background:transparent; color:#8DC63F; padding:0;">JAVA_HOME · MAVEN_HOME · ANDROID_HOME · NODE_PATH</code>
+            </div>
+            <div style="margin-top:8px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:9px 12px; font-size:0.71rem; color:#fca5a5; line-height:1.6;">
+              ⚠️ <strong style="color:#f87171;">Developer Mode activo</strong> — requerido por WinAppDriver para automatización desktop.
+            </div>
+            <div style="margin-top:8px; background:rgba(106,176,35,0.08); border:1px solid rgba(106,176,35,0.25); border-radius:8px; padding:12px 14px; font-size:0.71rem; color:#94a3b8; line-height:1.7;">
+              🍎 <strong style="color:#8DC63F; display:block; margin-bottom:6px; font-size:0.73rem;">¿Por qué un agente macOS separado para iOS?</strong>
+              Apple impone una restricción a nivel de sistema operativo: el Simulador de iOS y las herramientas de Xcode solo pueden ejecutarse en macOS. No existe versión de Xcode para Windows o Linux, por lo que no es posible correr tests iOS desde la VM Windows, sin importar el framework de automatización que se use.<br><br>
+              <strong style="color:#8DC63F;">¿Cómo se integra con Jenkins?</strong><br>
+              Jenkins soporta la ejecución distribuida mediante <em>agentes</em> (nodos). El servidor Jenkins principal (en la VM Windows) puede delegar la ejecución de ciertos pasos del pipeline a máquinas remotas registradas. El agente macOS se conecta al servidor Jenkins vía SSH o JNLP, queda disponible como nodo, y el Jenkinsfile dirige los pasos de iOS hacia ese nodo con la directiva <code style="color:#8DC63F; background-color:#1e1e1e; padding:2px 4px; border-radius:4px;">
+agent { label 'agente-ios' }
+</code>.<br><br>
+              <strong style="color:#8DC63F;">Flujo en la práctica:</strong><br>
+              Cuando se hace un merge con cambios en el módulo mobile y plataforma iOS, Jenkins asigna ese stage al nodo macOS, que inicia el Simulador, levanta Appium con xcuitest y ejecuta el Maven build. El reporte Allure se genera en la Mac y se envía de vuelta al servidor Jenkins para consolidarse con el resto de los resultados.<br><br>
+              <strong style="color:#f87171;">Hardware recomendado:</strong> Mac Mini (Apple Silicon o Intel) con al menos 16 GB RAM. Se puede compartir entre múltiples células si los builds no son concurrentes.
+            </div>
+          </div>
+        </div>
+
+        <!-- PC DESARROLLADOR -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; overflow:hidden; box-shadow:0 4px 18px rgba(0,0,0,0.07);">
+          <div style="background:linear-gradient(135deg,#00b8e8,#00d4ff); padding:12px 18px; display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.3rem;">💻</span>
+            <div>
+              <div style="color:white; font-weight:700; font-size:0.88rem;">PC Tester</div>
+              <div style="color:rgba(255,255,255,0.7); font-size:0.68rem; letter-spacing:0.5px;">Código · Depuración · Ejecución local</div>
+            </div>
+            <span style="margin-left:auto; background:rgba(255,255,255,0.2); color:white; font-size:0.62rem; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:1px;">LOCAL</span>
+          </div>
+          <div style="padding:16px 18px;">
+            <p style="font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#0a18c8; margin-bottom:8px;">✅ Obligatorio (todos los módulos)</p>
+            <table style="margin-top:0; margin-bottom:14px;">
+              <thead><tr>
+                <th>Herramienta</th><th>Versión</th><th>Notas</th>
+              </tr></thead>
+              <tbody>
+                <tr><td><strong>JDK 21</strong></td><td>21 LTS (21.0.x)</td><td>Eclipse Temurin, Corretto u Oracle JDK</td></tr>
+                <tr><td><strong>Maven</strong></td><td>3.9.x</td><td>Agregar a <code>PATH</code></td></tr>
+                <tr><td><strong>Git</strong></td><td>2.40+</td><td>Configurar usuario + SSH</td></tr>
+                <tr><td><strong>IDE (IntelliJ / VS Code)</strong></td><td>—</td><td>A preferencia del tester</td></tr>
+                <tr><td><strong>Allure CLI</strong></td><td>2.25.0</td><td>Reportes locales</td></tr>
+              </tbody>
+            </table>
+
+            <p style="font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#5a9b1e; margin-bottom:8px;">🔧 Opcional (por módulo activo)</p>
+            <table style="margin-top:0;">
+              <thead><tr>
+                <th>Herramienta</th><th>Módulo</th><th>Cuándo instalar</th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Node.js 20.x LTS</strong></td>
+                  <td><span class="tag tag-teal">mobile</span> <span class="tag tag-orange">desktop</span></td>
+                  <td>Ejecución local Appium</td>
+                </tr>
+                <tr>
+                  <td><strong>Appium Server 2.x</strong></td>
+                  <td><span class="tag tag-teal">mobile</span> <span class="tag tag-orange">desktop</span></td>
+                  <td>Tester ejecuta localmente</td>
+                </tr>
+                <tr>
+                  <td><strong>Android Studio + AVD</strong></td>
+                  <td><span class="tag tag-teal">mobile Android</span></td>
+                  <td>Tester trabaja en módulo mobile Android</td>
+                </tr>
+                <tr>
+                  <td><strong>Xcode 15+ (macOS)</strong></td>
+                  <td><span class="tag tag-green">mobile iOS</span></td>
+                  <td>Tester trabaja en módulo mobile iOS (requiere Mac)
+                </tr>
+                <tr>
+                  <td><strong>WinAppDriver 1.2.1</strong></td>
+                  <td><span class="tag tag-orange">desktop</span></td>
+                  <td>Tester trabaja en módulo desktop</td>
+                </tr>
+                <tr>
+                  <td><strong>Aplicativo Desktop</strong></td>
+                  <td><span class="tag tag-orange">desktop</span></td>
+                  <td>App objetivo automatización</td>
+                </tr>
+                <tr>
+                  <td><strong>Appium Inspector</strong></td>
+                  <td><span class="tag tag-teal">mobile</span></td>
+                  <td>Identificar localizadores mobile</td>
+                </tr>
+                <tr>
+                  <td><strong>Accessibility Insights</strong></td>
+                  <td><span class="tag tag-orange">desktop</span></td>
+                  <td>Identificar localizadores desktop</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VM SERVIDOR -->
+  <div class="swimlane lane-dark">
+    <div class="swimlane-header">🗄️ VM Servidor — Especificaciones y Software</div>
+    <div class="swimlane-content">
+      <div class="grid-2" style="margin-bottom:18px;">
+        <div class="spec-card">
+          <div class="spec-title">Especificaciones mínimas recomendadas</div>
+          <div class="spec-row"><span class="spec-key">Sistema operativo</span><span class="spec-val">Windows Server 2019/2022</span></div>
+          <div class="spec-row"><span class="spec-key">CPU</span><span class="spec-val">8 vCPU (recomendado 12+)</span></div>
+          <div class="spec-row"><span class="spec-key">RAM</span><span class="spec-val">16 GB mínimo (32 GB ideal)</span></div>
+          <div class="spec-row"><span class="spec-key">Disco</span><span class="spec-val">200 GB</span></div>
+          <div class="spec-row"><span class="spec-key">Red</span><span class="spec-val">Acceso a red interna (sistemas del banco, BD)</span></div>
+          <div class="spec-row"><span class="spec-key">Puertos</span><span class="spec-val">8080 (Jenkins) · 4723 (Appium)</span></div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-title">Justificación de recursos</div>
+          <div class="spec-row"><span class="spec-key">Jenkins + builds Maven</span><span class="spec-val">~3 GB RAM</span></div>
+          <div class="spec-row"><span class="spec-key">Appium server</span><span class="spec-val">~1 GB RAM</span></div>
+          <div class="spec-row"><span class="spec-key">Emulador Android (AVD)</span><span class="spec-val">~3-4 GB RAM</span></div>
+          <div class="spec-row"><span class="spec-key">Aplicativo Desktop</span><span class="spec-val">~1 GB RAM</span></div>
+          <div class="spec-row"><span class="spec-key">JVM + overhead del SO</span><span class="spec-val">~2 GB RAM</span></div>
+          <div class="spec-row"><span class="spec-key">Total estimado</span><span class="spec-val">~10-12 GB RAM en uso</span></div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title ct-purple">Jenkins CI/CD</div>
+          <div class="concept-box" style="margin-bottom:0;">
+            <strong>Versión recomendada: LTS</strong>
+            Ejecuta todos los módulos de test (api, web, mobile, desktop). El Jenkinsfile tiene parámetros de módulo, ambiente, plataforma y tags. Corre como servicio Windows para reinicio automático.
+          </div>
+          <div style="margin-top:10px;">
+            <div class="pill"><span class="pill-icon">🔌</span>Plugin: Allure Jenkins</div>
+            <div class="pill"><span class="pill-icon">🔌</span>Plugin: Git</div>
+            <div class="pill"><span class="pill-icon">🔌</span>Plugin: Maven</div>
+            <div class="pill"><span class="pill-icon">🔌</span>Plugin: JUnit</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title ct-blue">Appium Server</div>
+          <div class="concept-box-blue" style="margin-bottom:0;">
+            <strong>Versión: 2.x</strong>
+            Servidor de automatización para mobile (Android/iOS) y desktop (Windows). Para Android/Desktop corre en la VM Windows; para iOS corre en el agente macOS. Para Android usa uiautomator2; para iOS usa xcuitest; para desktop usa WinAppDriver.
+          </div>
+          <div style="margin-top:10px;">
+            <div class="pill"><span class="pill-icon">📦</span>Driver: uiautomator2 (Android)</div>
+            <div class="pill"><span class="pill-icon">📦</span>Driver: xcuitest (iOS — agente macOS)</div>
+            <div class="pill"><span class="pill-icon">📦</span>Driver: windows (Desktop)</div>
+            <div class="pill"><span class="pill-icon">🟢</span>Puerto: 4723</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title ct-teal">Android SDK / Emulador</div>
+          <div class="concept-box-teal" style="margin-bottom:0;">
+            <strong>Android Studio + AVD Manager</strong>
+            Se instala Android Studio para gestión del SDK y creación de AVDs (Android Virtual Devices). El emulador corre de fondo durante la ejecución de tests mobile. Se configura con la versión de Android que usa la app mobile del proyecto.
+          </div>
+          <div style="margin-top:10px;">
+            <div class="pill"><span class="pill-icon">📱</span>AVD: Android 12+</div>
+            <div class="pill"><span class="pill-icon">🔧</span>ANDROID_HOME configurado</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="card">
+          <div class="card-title" style="color:#6AB023; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:1.8px; margin-bottom:11px; padding-bottom:8px; border-bottom:1px solid #e2e8f0;">🍎 Agente macOS — iOS Simulator</div>
+          <div class="concept-box-teal" style="margin-bottom:10px;">
+            <strong>macOS + Xcode 15+ + xcuitest</strong>
+            iOS no puede ejecutarse en la VM Windows. Se requiere una máquina macOS (Mac Mini o similar) registrada como nodo Jenkins. Xcode provee el Simulador de iOS — la propuesta asume ejecución en Simulador, por lo que no se requiere firma de app ni cuenta de Apple paga.
+          </div>
+          <table>
+            <thead><tr><th>Componente</th><th>Detalle</th></tr></thead>
+            <tbody>
+              <tr><td>Sistema operativo</td><td>macOS Ventura / Sonoma</td></tr>
+              <tr><td>Xcode</td><td>15.x (incluye iOS SDK y Simulator)</td></tr>
+              <tr><td>Appium Server</td><td>2.x (mismo que Android)</td></tr>
+              <tr><td>Driver xcuitest</td><td>instalado vía <code>appium driver install xcuitest</code></td></tr>
+              <tr><td>iOS Simulator</td><td>iPhone 14+ / iOS 16+</td></tr>
+              <tr><td>Node.js</td><td>20.x LTS (requerido por Appium)</td></tr>
+              <tr><td>Jenkins Agent</td><td>Nodo conectado al Jenkins principal vía SSH o JNLP</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;">
+            <div class="pill"><span class="pill-icon">📦</span>Driver: xcuitest</div>
+            <div class="pill"><span class="pill-icon">🟢</span>Puerto Appium: 4723</div>
+            <div class="pill"><span class="pill-icon">🔗</span>Nodo Jenkins: agente-ios</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title ct-orange" style="margin-bottom:8px;">Variables de entorno — Agente macOS</div>
+          <pre style="font-size:0.73rem; background:#03072b; color:#e2e8f0; border-radius:8px; padding:12px 14px;"># ~/.zshrc o ~/.bash_profile del usuario Jenkins
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)
+export MAVEN_HOME=/opt/homebrew/opt/maven
+export NODE_PATH=$(npm root -g)
+export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
+
+# Xcode command line tools
+xcode-select --install
+
+# Verificar
+xcodebuild -version   # Xcode 15.x
+appium driver list --installed  # xcuitest</pre>
+          <div class="warn-box" style="margin-top:10px;">
+            <strong>⚠️ Firma de app (Signing)</strong>
+            Para instalar la app en el Simulator no se requiere firma. Para dispositivos físicos iOS sí se requiere un Apple Developer certificate. Para CI se recomienda usar siempre el Simulator.
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top:14px;">
+      </div>
+
+      <div class="grid-3" style="margin-top:14px;">
+        <div class="card">
+          <div class="card-title ct-orange">JDK 21</div>
+          <p class="desc">Runtime LTS para todos los módulos Maven del framework. Se configura <code>JAVA_HOME</code> en variables de entorno del sistema y se registra en Jenkins como JDK con nombre <code>JDK 21</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-title ct-red">Maven 3.9</div>
+          <p class="desc">Gestor de dependencias y build. Se instala en la VM y se registra en Jenkins con nombre <code>Maven 3.9</code>. Permite ejecutar <code>mvn test</code> con parámetros de ambiente y módulo.</p>
+        </div>
+        <div class="card">
+          <div class="card-title ct-purple">Aplicativo Desktop</div>
+          <p class="desc">El aplicativo de escritorio (.exe) debe estar instalado en la VM en la ruta configurada según el ambiente. Appium WinAppDriver automatiza la interacción con este ejecutable.</p>
+        </div>
+      </div>
+
+      <div class="warn-box" style="margin-top:14px;">
+        <strong>⚠️ Consideración sobre WinAppDriver v1.2.1</strong>
+        Para la automatización de aplicaciones desktop Windows, Appium 2 con el driver <code>windows</code> requiere que <strong>WinAppDriver 1.2.1</strong> esté instalado y corriendo en la VM (o que el sistema tenga habilitado el modo Developer en Windows). Asegurarse de habilitar el Developer Mode en el SO del servidor.
+      </div>
+    </div>
+  </div>
+
+  <!-- STACK TECNOLÓGICO -->
+  <div class="swimlane lane-blue">
+    <div class="swimlane-header">🛠️ Stack Tecnológico del Framework</div>
+    <div class="swimlane-content">
+      <table>
+        <thead>
+          <tr>
+            <th>Capa</th>
+            <th>Tecnología / Librería</th>
+            <th>Versión</th>
+            <th>Uso</th>
+            <th>Módulo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-purple">Lenguaje</span></td>
+            <td>Java JDK</td><td>21 LTS (21.0.x)</td>
+            <td>Lenguaje principal del framework</td>
+            <td><span class="tag tag-gray">Todos</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-purple">Build</span></td>
+            <td>Apache Maven</td><td>3.9.x</td>
+            <td>Gestión de dependencias, ejecución de tests y módulos</td>
+            <td><span class="tag tag-gray">Todos</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">Test Runner</span></td>
+            <td>JUnit 5 (Jupiter)</td><td>5.10.x</td>
+            <td>Anotaciones @Test, @BeforeEach, ciclo de vida, tags</td>
+            <td><span class="tag tag-gray">Todos</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td><span class="tag tag-blue">Web / API</span></td>
+            <td>Playwright Java</td><td>1.55.0</td>
+            <td>Automatización web y cliente HTTP para APIs REST y SOAP</td>
+            <td><span class="tag tag-blue">web · api</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td><span class="tag tag-teal">Mobile</span></td>
+            <td>Appium Java Client</td><td>9.x</td>
+            <td>Automatización de la app mobile Android y iOS</td>
+            <td><span class="tag tag-teal">mobile</span></td>
+          </tr>
+          <tr class="highlight-row">
+            <td><span class="tag tag-orange">Desktop</span></td>
+            <td>Appium + Windows Driver</td><td>2.x</td>
+            <td>Automatización del aplicativo de escritorio Windows</td>
+            <td><span class="tag tag-orange">desktop</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-red">Reportes</span></td>
+            <td>Allure Framework</td><td>2.25.0</td>
+            <td>Reportes HTML con historial, pasos y adjuntos (screenshots, videos)</td>
+            <td><span class="tag tag-gray">Todos</span></td>
+          </tr>
+
+          <tr>
+            <td><span class="tag tag-green">BD</span></td>
+            <td>JDBC + jt400</td><td>—</td>
+            <td>MySQL (driver JDBC estándar) y AS400 (driver jt400 de IBM)</td>
+            <td><span class="tag tag-purple">core · db-adapters</span></td>
+          </tr>
+
+          <tr>
+            <td><span class="tag tag-blue">JSON</span></td>
+            <td>Jackson Databind</td><td>2.17.x</td>
+            <td>Serialización y parsing de respuestas JSON en el módulo API</td>
+            <td><span class="tag tag-gray">api · core</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-gray">Logging</span></td>
+            <td>SLF4J + Logback</td><td>2.x / 1.5.x</td>
+            <td>Logging estructurado en todos los módulos del framework</td>
+            <td><span class="tag tag-gray">Todos</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-gray">CI/CD</span></td>
+            <td>Jenkins</td><td>LTS</td>
+            <td>Pipeline declarativo, ejecución por módulo/ambiente/tag</td>
+            <td><span class="tag tag-gray">Infraestructura</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-gray">Repositorio</span></td>
+            <td>Git (GitLab/GitHub)</td><td>—</td>
+            <td>Control de versiones con estrategia de ramas por célula</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page-nav" style="margin-top:28px;margin-bottom:8px;"><span></span><a class="nav-home" href="index.html">🏠 Índice</a><a class="nav-btn nav-btn-next" href="s2.html">Siguiente →</a></div></div></body></html>
